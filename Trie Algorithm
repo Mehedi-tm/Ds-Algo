@@ -1,0 +1,70 @@
+Problem link: https://www.spoj.com/problems/ADAINDEX/
+solution :  #include<bits/stdc++.h>
+using namespace std;
+const int alphabet_size=26;
+int children[1000000][alphabet_size];
+int cnt[1000000];
+bool endOfString[1000000];
+int nodecount=0;
+
+//initialize trie
+void initializeTrie() {
+     for(int i=0; i<1000000; i++) {
+         for(int j=0; j<26; j++) {
+            children[i][j]=0;
+         }
+         endOfString[i]=0;
+     }
+}
+//insert string 
+void insert(string &word) {
+    int node=0;//root node 
+    for(char ch: word) {
+        int index=ch-'a';
+        if(children[node][index]==0) {
+            children[node][index]=++nodecount;
+        }
+        node=children[node][index];
+        cnt[node]++;
+    }
+    endOfString[node]=1;
+}
+//cnt prefix
+int cnt_prefix (string &word) {
+    int node=0;
+    for(char ch: word) {
+        int index=ch-'a';
+        if(children[node][index]==0) {
+           return 0;
+        }
+        node=children[node][index];
+    }
+    return cnt[node];
+}
+
+void solve () {
+    int n,m;
+    cin>>n>>m;
+    while (n--)
+    {
+        string c;
+        cin>>c;
+        insert(c);
+    }
+    while(m--) {
+        string c;
+        cin>>c;
+        cout<<cnt_prefix(c)<<endl;
+    }
+    
+}
+
+int main() {
+    int tc=1;
+    //cin>>tc;
+    while(tc--) {
+        solve();
+    }
+}
+
+//author: SunMendi
